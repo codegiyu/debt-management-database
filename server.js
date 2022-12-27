@@ -20,7 +20,7 @@ const Role = db.role;
 const Bond = db.bond;
 
 db.mongoose.connect(
-    process.env.mongoString,
+    `${process.env.mongoString}`,
     {
         useNewUrlParser: true,
         useUnifiedTopology: true
