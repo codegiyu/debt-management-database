@@ -16,7 +16,7 @@ exports.signup = (req, res) => {
 
   user.save((err, user) => {
     if (err) {
-      res.status(500).send({ message: err });
+      res.json({ error: err });
       return;
     }
 
@@ -27,36 +27,36 @@ exports.signup = (req, res) => {
         },
         (err, roles) => {
           if (err) {
-            res.status(500).send({ message: err });
+            res.error({ error: err });
             return;
           }
 
           user.roles = roles.map(role => role._id);
           user.save(err => {
             if (err) {
-              res.status(500).send({ message: err });
+              res.json({ error: err });
               return;
             }
 
-            res.send({ message: "User was registered successfully!" });
+            res.json({ message: "User was registered successfully!" });
           });
         }
       );
     } else {
       Role.findOne({ name: "user" }, (err, role) => {
         if (err) {
-          res.status(500).send({ message: err });
+          res.json({ error: err });
           return;
         }
 
         user.roles = [role._id];
         user.save(err => {
           if (err) {
-            res.status(500).send({ message: err });
+            res.json({ error: err });
             return;
           }
 
-          res.send({ message: "User was registered successfully!" });
+          res.json({ message: "User was registered successfully!" });
         });
       });
     }
@@ -70,12 +70,12 @@ exports.signin = (req, res) => {
     .populate("roles", "-__v")
     .exec((err, user) => {
         if (err) {
-            res.status(500).send({ message: err });
+            res.json({ error: err });
             return;
         }
 
         if (!user) {
-            return res.status(404).send({ message: "User not found" });
+            return res.json({ error: "User not found" });
         }
 
         let passwordIsValid = bcrypt.compareSync(
@@ -84,9 +84,9 @@ exports.signin = (req, res) => {
         );
 
         if (!passwordIsValid) {
-            return res.status(401).send({
+            return res.json({
                 accessToken: null,
-                message: "Invalid Password!"
+                error: "Invalid Password!"
             });
         }
 
@@ -99,13 +99,16 @@ exports.signin = (req, res) => {
         for (let i = 0; i < user.roles.length; i++) {
             authorities.push("ROLE_" + user.roles[i].name.toUpperCase());
         }
-        res.status(200).send({
+        res.json({
+          status: "Success",
+          user: {
             id: user._id,
             firstname: user.firstname,
             lastname: user.lastname,
             email: user.email,
             roles: authorities,
             accessToken: token
+          }
         });
     });
 };

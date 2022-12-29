@@ -1,15 +1,15 @@
 exports.allAccess = (req, res) => {
-    res.status(200).send("Public Content.");
+    res.json({  message: "Public Content." });
 };
 
 exports.userBoard = (req, res) => {
-    res.status(200).send("User Content.");
+    res.json({  message: "User Content." });
 };
 
 exports.moderatorBoard = (req, res) => {
-    res.status(200).send("Moderator Content.");
+    res.json({  message: "Moderator Content." });
 };
 
 exports.adminBoard = (req, res) => {
-    res.status(200).send("Admin Content.");
+    res.json({  message: "Admin Content." });
 };
