@@ -7,7 +7,7 @@ require("dotenv").config();
 const app = express();
 
 let corsOptions = {
-    origin: ["http://localhost:3000", "https://debt-management.vercel.app"]
+    origin: "*"
 }
 
 app.use(cors(corsOptions))
